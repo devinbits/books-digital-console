@@ -1,19 +1,28 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
+import Button from 'components/widgets/Button';
+import {
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+  CssBaseline,
+  Avatar,
+  Snackbar,
+} from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
+
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import { login } from 'api/auth';
+import { logout } from 'redux/reducers/authSlice';
 import { useDispatch } from 'react-redux';
+import { validateEmail } from 'utils/utils';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -53,10 +62,26 @@ const useStyles = makeStyles((theme) => ({
 export default function Login() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
+  const { status, token, isLoading, message, error } = useSelector(
+    (state) => state.authReducer
+  );
+
+  const [isSubmitted, setIsSubmitted] = React.useState(false);
   const [FormData, setFormData] = React.useState({
     email: '',
     password: '',
   });
+
+  React.useEffect(() => {
+    if (status && token) history.replace('/home');
+  }, [history, status, token]);
+
+  React.useEffect(() => {
+    if (isSubmitted && !isLoading)
+      setTimeout(() => setIsSubmitted(false), 3000);
+  }, [isSubmitted, isLoading]);
+
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -67,9 +92,13 @@ export default function Login() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form className={classes.form}>
           <TextField
             value={FormData.email}
+            error={
+              FormData.email?.length !== 0 && !validateEmail(FormData.email)
+            }
+            helperText="Please enter valid email."
             onChange={(e) =>
               setFormData((data) => ({ ...data, email: e.target.value }))
             }
@@ -79,12 +108,15 @@ export default function Login() {
             fullWidth
             id="email"
             label="Email Address"
-            name="email"
-            autoComplete="email"
+            // autoComplete="email"
             autoFocus
           />
           <TextField
             value={FormData.password}
+            error={
+              FormData.password?.length !== 0 && FormData.password.length < 6
+            }
+            helperText="Please enter password."
             onChange={(e) =>
               setFormData((data) => ({ ...data, password: e.target.value }))
             }
@@ -95,23 +127,23 @@ export default function Login() {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           />
           <Button
-            fullWidth
-            variant="outlined"
-            color="primary"
+            text="Sign In"
+            loading={isLoading}
             className={classes.submit}
+            disabled={
+              !validateEmail(FormData.email) || FormData.password.length < 6
+            }
             onClick={() => {
               dispatch(login(FormData.email, FormData.password));
+              setIsSubmitted(true);
             }}
-          >
-            Sign In
-          </Button>
+          />
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
@@ -129,6 +161,12 @@ export default function Login() {
       <Box mt={8}>
         <Copyright />
       </Box>
+      <Snackbar
+        open={isSubmitted && message && !isLoading}
+        onClose={() => dispatch(logout())}
+      >
+        <Alert severity={error ? 'error' : 'success'}>{message}</Alert>
+      </Snackbar>
     </Container>
   );
 }

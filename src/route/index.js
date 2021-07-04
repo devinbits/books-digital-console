@@ -1,6 +1,6 @@
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import Auth from 'components/Auth';
+import Auth from 'pages/Auth';
 import Home from 'pages/HomePage';
 import ProtectedRoute from './protectedRoute';
 
