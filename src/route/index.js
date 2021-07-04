@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import Auth from 'components/Auth';
 import Home from 'pages/HomePage';
@@ -6,17 +6,17 @@ import ProtectedRoute from './protectedRoute';
 
 const Routes = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Switch>
         <Route exact path="/auth" component={Auth} />
         <ProtectedRoute path="/home">
           <Home />
         </ProtectedRoute>
         <Route path="*">
-          <Redirect exact from="/" to="dashboard" />
+          <Redirect exact from="/" to="home" />
         </Route>
       </Switch>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 
