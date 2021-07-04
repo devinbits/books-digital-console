@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// const BASE_URL = 'https://digi-books.herokuapp.com/auth/login';
-const BASE_URL = 'http://localhost/';
+const BASE_URL = 'https://digi-books.herokuapp.com/';
+// const BASE_URL = 'http://localhost/';
 
 const GetService = (authToken, baseURL = BASE_URL, headers = {}) => {
   const defaultHeader = {
