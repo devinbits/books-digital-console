@@ -12,7 +12,11 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import LogoutIcon from '@material-ui/icons/ExitToApp';
 
+import { logout } from 'redux/reducers/authSlice';
+import { useDispatch } from 'react-redux';
+
 const Header = () => {
+  const dispatch = useDispatch();
   return (
     <AppBar position="static">
       <Toolbar>
@@ -20,8 +24,10 @@ const Header = () => {
           <Grid>
             <Typography>Title</Typography>
           </Grid>
-          <Grid item sm />  {/* This will take all empty space like flex:1 */}
-          <Grid>    {/* This will take width of child */}
+          <Grid item sm /> {/* This will take all empty space like flex:1 */}
+          <Grid>
+            {' '}
+            {/* This will take width of child */}
             <IconButton>
               <Badge badgeContent={4} color="secondary">
                 <AccountCircleIcon />
@@ -32,7 +38,7 @@ const Header = () => {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => dispatch(logout())}>
               <LogoutIcon />
             </IconButton>
           </Grid>
