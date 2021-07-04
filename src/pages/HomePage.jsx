@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import { Header, SideMenu, Page } from 'components/common';
 
 const HomePage = (props) => {
@@ -10,6 +10,6 @@ const HomePage = (props) => {
   );
 };
 
-HomePage.propTypes = {};
+// HomePage.propTypes = {};
 
 export default HomePage;
