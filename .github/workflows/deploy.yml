@@ -56,6 +56,10 @@ jobs:
       uses: github/codeql-action/analyze@v1
       
     - name: Publish on Github Pages
+      uses: actions/setup-node@v2.2.0
+      with:
+        node-version: '14.x'
+    - run: npm install
     - run: npm run deploy
   
 
