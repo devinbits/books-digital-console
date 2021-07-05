@@ -1,5 +1,5 @@
 import Service from '../apiService';
-import { loginRequest, loginResponse } from '../../redux/reducers/authSlice';
+import { authRequest, authResponse } from '../../redux/reducers/authSlice';
 
 // Endpoints
 const LOGIN = 'auth/login';
@@ -7,22 +7,29 @@ const REGISTER = 'auth/register';
 
 // Async Actions
 export const login = (email, password) => async (dispatch, getState) => {
-  dispatch(loginRequest());
+  dispatch(authRequest());
   Service()
     .post(LOGIN, JSON.stringify({ email, password }))
     .then((res) => {
-      dispatch(loginResponse(res.data));
+      dispatch(authResponse(res.data));
     })
-    .catch((error) => dispatch(loginResponse({ error })));
+    .catch((error) => dispatch(authResponse({ error })));
 };
 
 export const register =
-  (name, email, password, phone, nationalId) => async (dispatch, getState) => {
-    dispatch(loginRequest());
+  ({ name, email, password, phone }) =>
+  async (dispatch, getState) => {
+    dispatch(authRequest());
     Service()
-      .post(REGISTER, { name, email, password, phone, nationalId })
-      .then((res) => {
-        dispatch(loginResponse(res.data));
+      .post(REGISTER, {
+        name,
+        email,
+        password,
+        phone,
+        nationalId: `${email.split('@')[0].slice(0, 10)}${phone}`,
       })
-      .catch((error) => dispatch(loginResponse({ error })));
+      .then((res) => {
+        dispatch(authResponse(res.data));
+      })
+      .catch((error) => dispatch(authResponse({ error })));
   };

@@ -1,6 +1,7 @@
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import Auth from 'pages/Auth';
+import Login from 'pages/Login';
+import Register from 'pages/Register';
 import Home from 'pages/HomePage';
 import ProtectedRoute from './protectedRoute';
 
@@ -8,7 +9,8 @@ const Routes = () => {
   return (
     <HashRouter>
       <Switch>
-        <Route exact path="/auth" component={Auth} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={Register} />
         <ProtectedRoute path="/home">
           <Home />
         </ProtectedRoute>

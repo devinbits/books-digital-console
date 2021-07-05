@@ -22,7 +22,7 @@ const Header = () => {
       <Toolbar>
         <Grid container>
           <Grid>
-            <Typography>Title</Typography>
+            <Typography>Books Digital</Typography>
           </Grid>
           <Grid item sm /> {/* This will take all empty space like flex:1 */}
           <Grid>

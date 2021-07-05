@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from 'components/widgets/Button';
+import TextInput from 'components/widgets/TextInput';
 import {
-  TextField,
   FormControlLabel,
   Checkbox,
   Link,
@@ -20,44 +20,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import { login } from 'api/auth';
 import { logout } from 'redux/reducers/authSlice';
 import { useDispatch } from 'react-redux';
-import { validateEmail } from 'utils/utils';
+import { validateLoginForm } from 'utils/utils';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import Copyright from 'components/common/Copyright';
+import getStyles from 'styles/authStyles';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link
-        color="inherit"
-        href="https://github.com/devinbits/books-digital-express#readme"
-      >
-        Digital Express
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+const useStyles = makeStyles((theme) => getStyles(theme));
+
+const showError = (value, error) => value.length && error;
 
 export default function Login() {
   const classes = useStyles();
@@ -68,10 +39,7 @@ export default function Login() {
   );
 
   const [isSubmitted, setIsSubmitted] = React.useState(false);
-  const [FormData, setFormData] = React.useState({
-    email: '',
-    password: '',
-  });
+  const [FormData, setFormData] = React.useState({});
 
   React.useEffect(() => {
     if (status && token) history.replace('/home');
@@ -81,6 +49,9 @@ export default function Login() {
     if (isSubmitted && !isLoading)
       setTimeout(() => setIsSubmitted(false), 3000);
   }, [isSubmitted, isLoading]);
+
+  const { email = '', password = '' } = FormData;
+  const formError = validateLoginForm(FormData);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -93,37 +64,27 @@ export default function Login() {
           Sign in
         </Typography>
         <form className={classes.form}>
-          <TextField
-            value={FormData.email}
-            error={
-              FormData.email?.length !== 0 && !validateEmail(FormData.email)
-            }
+          <TextInput
+            value={email}
+            error={showError(email, formError.email)}
             helperText="Please enter valid email."
             onChange={(e) =>
               setFormData((data) => ({ ...data, email: e.target.value }))
             }
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
+            inputProps={{ maxLength: 45 }}
             id="email"
             label="Email Address"
-            // autoComplete="email"
+            autoComplete="email"
             autoFocus
           />
-          <TextField
-            value={FormData.password}
-            error={
-              FormData.password?.length !== 0 && FormData.password.length < 6
-            }
+          <TextInput
+            value={password}
+            error={showError(password, formError.password)}
             helperText="Please enter password."
             onChange={(e) =>
               setFormData((data) => ({ ...data, password: e.target.value }))
             }
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
+            inputProps={{ maxLength: 10 }}
             label="Password"
             type="password"
             id="password"
@@ -136,29 +97,27 @@ export default function Login() {
             text="Sign In"
             loading={isLoading}
             className={classes.submit}
-            disabled={
-              !validateEmail(FormData.email) || FormData.password.length < 6
-            }
+            disabled={Object.keys(formError).length !== 0}
             onClick={() => {
               dispatch(login(FormData.email, FormData.password));
               setIsSubmitted(true);
             }}
           />
-          <Grid container>
-            <Grid item xs>
+          <Grid container justify="center">
+            {/* <Grid item xs>
               <Link href="#" variant="body2">
                 Forgot password?
               </Link>
-            </Grid>
+            </Grid> */}
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="#/register" variant="body2">
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
+      <Box mt={4}>
         <Copyright />
       </Box>
       <Snackbar
