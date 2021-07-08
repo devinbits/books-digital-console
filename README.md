@@ -11,13 +11,15 @@
 <br>
 
 ## Books Digital Console
-An express based app which serves a tool for managing digital books library.
+Developing a PWA which serves as a console for managing digital books system.
 Live on https://devinbits.github.io/books-digital-console/
 ### Running the application
 
 #### Prerequisites: 
 1. Download and install latest **nodejs** https://nodejs.org/en/download/
 2. Install Create-react-app
+3. Please clone https://github.com/devinbits/books-digital-express for running backend in local (optional) 
+   or you can use arleady hosted instance at https://digi-books.herokuapp.com/
 
 #### Steps
 1. Clone the respo
