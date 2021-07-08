@@ -12,7 +12,7 @@
 
 ## Books Digital Console
 An express based app which serves a tool for managing digital books library.
-
+Live on https://devinbits.github.io/books-digital-console/
 ### Running the application
 
 #### Prerequisites: 
