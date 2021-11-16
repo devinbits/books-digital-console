@@ -27,7 +27,10 @@ Live on https://devinbits.github.io/books-digital-console/
 3. Set environment configurations using _.evn file_
     *create .env file in project root dir as*
      ```
-     WIP
+      DB_HOST=localhost
+      DB_NAME=digital_library
+      DB_PASSWORD=password
+      DB_USER=admin
      ```
 
 4. run _npm start_
